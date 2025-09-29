@@ -66,4 +66,23 @@ class TableTest {
         rows.get(0).set(0, "Modified");
         assertEquals("1", tab.getRows().get(0).get(0), "Original row values should not be modified!");
     }
+
+    /**
+     * Test that getRow returns the correct row for a valid index.
+     */
+    @Test
+    void testGetRowValid() {
+        assertEquals(Arrays.asList("1", "30", "-15"), tab.getRow(0), "Should return the first row correctly");
+    }
+
+    /**
+     * Test that getRow throws IllegalArgumentException for an invalid index.
+     */
+    @Test
+    void testGetRowInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> tab.getRow(-1), "Should throw IllegalArgumentException for negative index");
+        assertThrows( IllegalArgumentException.class, () -> tab.getRow(3), "Should throw IllegalArgumentException for index out of bounds");
+    }
+    
+
 }

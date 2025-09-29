@@ -54,5 +54,23 @@ public class Table {
         }
         return copy;
     }
+    
+    /**
+     * Returns a copy of the row at the specified index.
+     * 
+     * This method performs bounds checking and throws an exception if the index
+     * A new list is returned to prevent external modification of the internal table data.
+     *
+     * @param rowIndex the index of the row to retrieve
+     * @return a copy of the row at the specified index
+     * @throws IllegalArgumentException if rowIndex is negative or >= number of rows
+     */
+    public List<String> getRow(int rowIndex) {
+        if (rowIndex < 0 || rowIndex >= rows.size()) {
+            throw new IllegalArgumentException("Invalid row index: " + rowIndex);
+        }
+        return new ArrayList<>(rows.get(rowIndex));
+    }
+
 
 }
