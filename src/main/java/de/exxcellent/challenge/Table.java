@@ -115,6 +115,37 @@ public class Table {
         }
         return column;
     }
+    
+    /**
+     * Adds a new column to the table with the specified header and values.
+     * The number of values must match the current number of rows in the table.
+     *
+     * @param header The name of the new column
+     * @param values List of values for the new column; must have the same size as the number of rows
+     * @throws IllegalArgumentException if the number of values does not match the number of rows
+     */
+    public void addColumn(String header, List<String> values) {
+        if (values.size() != rows.size()) 
+            throw new IllegalArgumentException("Anzahl der Werte passt nicht zu den Zeilen!");
+        headers.add(header);
+        for (int i = 0; i < rows.size(); i++) {
+            rows.get(i).add(values.get(i));
+        }
+    }
+
+    /**
+     * Adds a new row to the table.
+     * The row must have the same number of values as the number of headers.
+     *
+     * @param row List of values for the new row
+     * @throws IllegalArgumentException if the row size does not match the number of headers
+     */
+    public void addRow(List<String> row) {
+        if (row.size() != headers.size()) 
+            throw new IllegalArgumentException("Zeile hat zu wenig Spalten!");
+        rows.add(new ArrayList<>(row));
+    }
+
 
 
 }

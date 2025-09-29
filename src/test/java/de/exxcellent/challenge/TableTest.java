@@ -85,6 +85,23 @@ class TableTest {
     }
     
     /**
+     * Test getting the column index by header name.
+     */
+    @Test
+    void testGetColumnIndex() {
+        assertEquals(1, tab.getColumnIndex("MaxTemp"));
+        assertEquals(-1, tab.getColumnIndex("DoesNotExist"));
+    }
+    
+    /**
+     * Test getting a specific value from the table.
+     */
+    @Test
+    void testGetValue() {
+        assertEquals("15", tab.getValue(1, "MinTemp"));
+    }
+    
+    /**
      * Test getting a valid column.
      */
     @Test
@@ -99,23 +116,63 @@ class TableTest {
     void testGetColumnInvalid() {
         assertThrows(IllegalArgumentException.class, () -> tab.getColumn("DoesNotExist"));
     }
-
-    /**
-     * Test getting a specific value from the table.
-     */
-    @Test
-    void testGetValue() {
-        assertEquals("15", tab.getValue(1, "MinTemp"));
-    }
-
-    /**
-     * Test getting the column index by header name.
-     */
-    @Test
-    void testGetColumnIndex() {
-        assertEquals(1, tab.getColumnIndex("MaxTemp"));
-        assertEquals(-1, tab.getColumnIndex("DoesNotExist"));
-    }
     
+    /**
+     * Test adding a valid new column to the table.
+     * Ensures the header is added and all row values are appended correctly.
+     */
+    @Test
+    void testAddColumnValid() {
+        List<String> newColValues = Arrays.asList("22.5", "23.0", "27.5");
+        tab.addColumn("AvgTemp", newColValues);
+
+        List<String> headers = tab.getHeaders();
+        assertEquals(4, headers.size());
+        assertEquals("AvgTemp", headers.get(3));
+
+        List<List<String>> rows = tab.getRows();
+        assertEquals("22.5", rows.get(0).get(3));
+        assertEquals("23.0", rows.get(1).get(3));
+        assertEquals("27.5", rows.get(2).get(3));
+    }
+
+    /**
+     * Test adding a column with mismatched number of values.
+     * Expects IllegalArgumentException to be thrown.
+     */
+    @Test
+    void testAddColumnInvalidSize() {
+        List<String> newColValues = Arrays.asList("22.5", "23.0"); 
+        assertThrows(IllegalArgumentException.class, () -> tab.addColumn("AvgTemp", newColValues));
+    }
+
+    /**
+     * Test adding a valid new row to the table.
+     * Ensures the row is appended correctly and matches the header size.
+     */
+    @Test
+    void testAddRowValid() {
+        List<String> newRow = Arrays.asList("4", "25", "5");
+        tab.addRow(newRow);
+
+        List<List<String>> rows = tab.getRows();
+        assertEquals(4, rows.size());
+        assertEquals("4", rows.get(3).get(0));
+        assertEquals("25", rows.get(3).get(1));
+        assertEquals("5", rows.get(3).get(2));
+    }
+
+    /**
+     * Test adding a row with mismatched number of values.
+     * Expects IllegalArgumentException to be thrown.
+     */
+    @Test
+    void testAddRowInvalidSize() {
+        List<String> newRow = Arrays.asList("4", "25");
+        assertThrows(IllegalArgumentException.class, () -> tab.addRow(newRow));
+    }
+   
+
+  
 
 }
