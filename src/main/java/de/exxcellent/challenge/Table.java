@@ -57,8 +57,6 @@ public class Table {
     
     /**
      * Returns a copy of the row at the specified index.
-     * 
-     * This method performs bounds checking and throws an exception if the index
      * A new list is returned to prevent external modification of the internal table data.
      *
      * @param rowIndex the index of the row to retrieve
@@ -70,6 +68,52 @@ public class Table {
             throw new IllegalArgumentException("Invalid row index: " + rowIndex);
         }
         return new ArrayList<>(rows.get(rowIndex));
+    }
+    
+    /**
+     * Returns the index of the specified column header.
+     *
+     * @param header the name of the column
+     * @return the index of the column, or -1 if the column does not exist
+     */
+    public int getColumnIndex(String header) {
+        return headers.indexOf(header);
+    }
+
+    
+    /**
+     * Returns the value at the specified row and column (by header name).
+     *
+     * @param rowIndex the index of the row
+     * @param header the name of the column
+     * @return the value as a String
+     * @throws IllegalArgumentException if the header does not exist or the row index is invalid
+     */
+    public String getValue(int rowIndex, String header) {
+        int colIndex = getColumnIndex(header);
+        if (colIndex == -1) 
+            throw new IllegalArgumentException("Column does not exist: " + header);
+
+        return getRow(rowIndex).get(colIndex);
+    }
+
+    /**
+     * Returns a column as a list of strings for the given header.
+     *
+     * @param header the name of the column
+     * @return a List of strings representing the column values
+     * @throws IllegalArgumentException if the header does not exist
+     */
+    public List<String> getColumn(String header) {
+        int colIndex = getColumnIndex(header);
+        if (colIndex == -1) 
+            throw new IllegalArgumentException("Column does not exist: " + header);
+
+        List<String> column = new ArrayList<>();
+        for (List<String> row : rows) {
+            column.add(row.get(colIndex));
+        }
+        return column;
     }
 
 

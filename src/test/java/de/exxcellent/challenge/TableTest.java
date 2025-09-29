@@ -84,5 +84,38 @@ class TableTest {
         assertThrows( IllegalArgumentException.class, () -> tab.getRow(3), "Should throw IllegalArgumentException for index out of bounds");
     }
     
+    /**
+     * Test getting a valid column.
+     */
+    @Test
+    void testGetColumnValid() {
+        assertEquals(Arrays.asList("30", "30", "-10"), tab.getColumn("MaxTemp"));
+    }
+
+    /**
+     * Test getting a column that does not exist.
+     */
+    @Test
+    void testGetColumnInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> tab.getColumn("DoesNotExist"));
+    }
+
+    /**
+     * Test getting a specific value from the table.
+     */
+    @Test
+    void testGetValue() {
+        assertEquals("15", tab.getValue(1, "MinTemp"));
+    }
+
+    /**
+     * Test getting the column index by header name.
+     */
+    @Test
+    void testGetColumnIndex() {
+        assertEquals(1, tab.getColumnIndex("MaxTemp"));
+        assertEquals(-1, tab.getColumnIndex("DoesNotExist"));
+    }
+    
 
 }
