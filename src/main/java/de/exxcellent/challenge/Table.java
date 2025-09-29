@@ -2,6 +2,7 @@ package de.exxcellent.challenge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Represents a table with headers and rows.
@@ -145,6 +146,42 @@ public class Table {
             throw new IllegalArgumentException("Zeile hat zu wenig Spalten!");
         rows.add(new ArrayList<>(row));
     }
+    
+    /**
+     * Applies a binary operation to two columns of the table and returns the result as a list of strings.
+     * Each row is processed independently. If a value cannot be parsed as double, null is returned for that row.
+     *
+     * @param header1 Name of the first column
+     * @param header2 Name of the second column
+     * @param operator A BiFunction that defines the mathematical operation to perform on the two column values
+     * @return List of results as strings, one per row
+     * @throws IllegalArgumentException if one or both columns do not exist
+     */
+    public List<String> processColumns(String header1, String header2, BiFunction<Double, Double, Double> operator) {
+        int idx1 = getColumnIndex(header1);
+        int idx2 = getColumnIndex(header2);
+        if (idx1 == -1 || idx2 == -1) 
+            throw new IllegalArgumentException("Eine oder beiden Spalten existieren nicht!");
+
+        List<String> result = new ArrayList<>();
+
+        for (List<String> row : rows) {
+            try {
+                double val1 = Double.parseDouble(row.get(idx1));
+                double val2 = Double.parseDouble(row.get(idx2));
+
+                double calcRes = operator.apply(val1, val2);
+
+                result.add(Double.toString(calcRes));
+            } catch (NumberFormatException e) {
+                result.add(null);
+                System.out.println("Parsing String to Double not possible! " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
 
 
 

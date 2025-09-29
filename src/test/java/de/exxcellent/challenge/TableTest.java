@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -170,6 +171,35 @@ class TableTest {
     void testAddRowInvalidSize() {
         List<String> newRow = Arrays.asList("4", "25");
         assertThrows(IllegalArgumentException.class, () -> tab.addRow(newRow));
+    }
+    
+    /**
+     * Tests subtraction of two numeric columns.
+     */
+    @Test
+    void testSubtraction() {
+        BiFunction<Double, Double, Double> subtract = (x, y) -> x - y;
+        List<String> result = tab.processColumns("MaxTemp", "MinTemp", subtract);
+
+        assertEquals(Arrays.asList("45.0", "15.0", "10.0"), result);
+    }
+
+    /**
+     * Tests behavior when one column contains non-numeric values.
+     * Non-parsable entries should produce null in the result.
+     */
+    @Test
+    void testNonNumericValues() {
+    	List<String> headers = Arrays.asList("Day", "MaxTemp", "MinTemp");
+        List<List<String>> rows = new ArrayList<>();
+        rows.add(Arrays.asList("Monday", "30", "-15"));
+        rows.add(Arrays.asList("Tuesday", "30", "15"));
+        rows.add(Arrays.asList("Wednesday", "-10", "-20"));
+        tab = new Table(new ArrayList<>(headers), new ArrayList<>(rows));
+        BiFunction<Double, Double, Double> subtract = (x, y) -> x - y;
+        List<String> result = tab.processColumns("Day", "MaxTemp", subtract);
+
+        assertEquals(Arrays.asList(null, null, null), result);
     }
    
 
