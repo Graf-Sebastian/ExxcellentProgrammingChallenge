@@ -201,6 +201,70 @@ class TableTest {
 
         assertEquals(Arrays.asList(null, null, null), result);
     }
+
+        /**
+         * Test that the maximum value in "MaxTemp" is correctly identified.
+         */
+        @Test
+        void testGetExtremeValueMax() {
+            assertEquals(30.0, tab.getExtremeValue("MaxTemp", true));
+        }
+
+        /**
+         * Test that the minimum value in "MinTemp" is correctly identified.
+         */
+        @Test
+        void testGetExtremeValueMin() {
+            assertEquals(-20, tab.getExtremeValue("MinTemp", false));
+        }
+
+        /**
+         * Test that indices of maximum values in "MaxTemp" are correctly returned.
+         */
+        @Test
+        void testGetExtremeIndicesMax() {
+            List<Integer> indices = tab.getExtremeIndices("MaxTemp", true);
+            assertEquals(Arrays.asList(0,1), indices);
+        }
+
+        /**
+         * Test that indices of minimum values in "MinTemp" are correctly returned.
+         */
+        @Test
+        void testGetExtremeIndicesMin() {
+            List<Integer> indices = tab.getExtremeIndices("MinTemp", false);
+            assertEquals(Arrays.asList(2), indices);
+        }
+
+        /**
+         * Test getExtremeIndices with a direct column list for maximum value.
+         */
+        @Test
+        void testGetExtremeIndicesWithColumnMax() {
+            List<String> col = Arrays.asList("10", "20", "20", "5");
+            List<Integer> indices = tab.getExtremeIndices(col, true);
+            assertEquals(Arrays.asList(1, 2), indices);
+        }
+
+        /**
+         * Test getExtremeIndices with a direct column list for minimum value.
+         */
+        @Test
+        void testGetExtremeIndicesWithColumnMin() {
+            List<String> col = Arrays.asList("10", "20", "20", "5");
+            List<Integer> indices = tab.getExtremeIndices(col, false);
+            assertEquals(Arrays.asList(3), indices);
+        }
+
+        /**
+         * Test that invalid number strings in the column are ignored.
+         */
+        @Test
+        void testGetExtremeIndicesWithInvalidNumbers() {
+            List<String> col = Arrays.asList("10", "abc", "20");
+            List<Integer> indices = tab.getExtremeIndices(col, true);
+            assertEquals(Arrays.asList(2), indices);
+        }
    
 
   

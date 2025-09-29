@@ -181,6 +181,102 @@ public class Table {
 
         return result;
     }
+    
+    /**
+     * Returns the extreme (maximum or minimum) value in the column (by header).
+     *
+     * @param header Name of the column
+     * @param findMax true to find maximum, false to find minimum
+     * @return the extreme value as Double, or null if no numeric values exist
+     */
+    public Double getExtremeValue(String header, boolean findMax) {
+        List<String> col = getColumn(header);
+        return getExtremeValue(col, findMax);
+    }
+
+    /**
+     * Returns the extreme (maximum or minimum) value in the given column.
+     *
+     * @param col List of string values representing a column
+     * @param findMax true to find maximum, false to find minimum
+     * @return the extreme value as Double, or null if no numeric values exist
+     */
+    public Double getExtremeValue(List<String> col, boolean findMax) {
+        Double extreme = null;
+        for (String val : col) {
+            if (val == null || val.isEmpty()) continue;
+            try {
+                double num = Double.parseDouble(val);
+                if (extreme == null || (findMax && num > extreme) || (!findMax && num < extreme)) {
+                    extreme = num;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Parsing failed: " + e.getMessage());
+            }
+        }
+        return extreme;
+    }
+
+    /**
+     * Returns all indices in the column (by header) that match the given value.
+     *
+     * @param header Name of the column
+     * @param value The value to search for
+     * @return List of row indices where the column equals the given value
+     */
+    public List<Integer> getIndicesOfValue(String header, double value) {
+        List<String> col = getColumn(header);
+        return getIndicesOfValue(col, value);
+    }
+
+    /**
+     * Returns all indices in the given column that match the specified value.
+     *
+     * @param col List of string values representing a column
+     * @param value The value to search for
+     * @return List of row indices where the column equals the given value
+     */
+    public List<Integer> getIndicesOfValue(List<String> col, double value) {
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < col.size(); i++) {
+            String val = col.get(i);
+            try {
+                if (val != null && !val.isEmpty() && Double.parseDouble(val) == value) {
+                    indices.add(i);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Parsing failed: " + e.getMessage());
+            }
+        }
+        return indices;
+    }
+
+    /**
+     * Returns the indices of the extreme value in the column (by header).
+     *
+     * @param header Name of the column
+     * @param findMax true for maximum, false for minimum
+     * @return List of row indices where the extreme value occurs
+     */
+    public List<Integer> getExtremeIndices(String header, boolean findMax) {
+        Double extreme = getExtremeValue(header, findMax);
+        if (extreme == null) return new ArrayList<>();
+        return getIndicesOfValue(header, extreme);
+    }
+
+    /**
+     * Returns the indices of the extreme value in the given column.
+     *
+     * @param col List of string values representing a column
+     * @param findMax true for maximum, false for minimum
+     * @return List of row indices where the extreme value occurs
+     */
+    public List<Integer> getExtremeIndices(List<String> col, boolean findMax) {
+        Double extreme = getExtremeValue(col, findMax);
+        if (extreme == null) return new ArrayList<>();
+        return getIndicesOfValue(col, extreme);
+    }
+
 
 
 
