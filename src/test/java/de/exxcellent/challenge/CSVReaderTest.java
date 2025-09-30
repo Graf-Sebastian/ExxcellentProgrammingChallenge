@@ -16,7 +16,7 @@ class CSVReaderTest {
      * Tests that a normal CSV file is correctly read into a Table object.
      */
     @Test
-    void testReadAsTabelle() throws IOException {
+    void testReadAsTable() throws IOException {
         CSVReader reader = new CSVReader("de/exxcellent/challenge/test.csv");
         Table tab = reader.readAsTable();
 
@@ -39,7 +39,7 @@ class CSVReaderTest {
      * Tests that reading a non-existent file throws an IOException.
      */
     @Test
-    void testReadAsTabelleFileNotFound() {
+    void testReadAsTableFileNotFound() {
         CSVReader reader = new CSVReader("de/exxcellent/challenge/notFound.csv");
         assertThrows(IOException.class, reader::readAsTable);
     }

@@ -70,7 +70,7 @@ class AppTest {
 
     /**
      * Helper method that performs a generic analysis to access the private function in App class:
-     * Processes two numeric columns with a given operation (e.g., subtraction, abs difference)
+      * Processes two numeric columns with a given operation (e.g., subtraction, abs difference)
      * Finds the row indices with either min or max result values
      * Returns the first column values of those rows, joined as a string
      *
@@ -81,8 +81,7 @@ class AppTest {
      * @param isMax true to search for max values, false for min values
      * @return concatenated string of identifiers (from column 0) of the extreme rows
      */
-    private static String invokeAnalyze(Table tab, String col1, String col2,
-                                        BiFunction<Double, Double, Double> op, boolean isMax) {
+    private static String invokeAnalyze(Table tab, String col1, String col2, BiFunction<Double, Double, Double> op, boolean isMax) {
         List<String> processedCol = tab.processColumns(col1, col2, op);
         List<Integer> rowIdxs = tab.getExtremeIndices(processedCol, isMax);
 

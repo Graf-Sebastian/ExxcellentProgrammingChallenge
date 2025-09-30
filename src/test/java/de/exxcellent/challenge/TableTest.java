@@ -59,11 +59,9 @@ class TableTest {
         assertEquals(3, rows.size());
         assertEquals("1", rows.get(0).get(0));
 
-        // Add a new row to the returned list
         rows.add(new ArrayList<>(Arrays.asList("4", "40", "10")));
         assertEquals(3, tab.getRows().size(), "Original rows should not be modified!");
 
-        // Modify a value in a returned row
         rows.get(0).set(0, "Modified");
         assertEquals("1", tab.getRows().get(0).get(0), "Original row values should not be modified!");
     }
@@ -91,7 +89,7 @@ class TableTest {
     @Test
     void testGetColumnIndex() {
         assertEquals(1, tab.getColumnIndex("MaxTemp"));
-        assertEquals(-1, tab.getColumnIndex("DoesNotExist"));
+        assertThrows( IllegalArgumentException.class, () -> tab.getColumnIndex("DoesNotExist"), "Should throw IllegalArgumentException for index -1");
     }
     
     /**

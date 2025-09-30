@@ -10,10 +10,8 @@ import java.util.function.BiFunction;
  */
 public class Table {
     
-    // List of column headers
 	private List<String> headers;
     
-    // List of rows
     private List<List<String>> rows;
     
     /**
@@ -51,7 +49,7 @@ public class Table {
     public List<List<String>> getRows() {
         List<List<String>> copy = new ArrayList<>();
         for (List<String> row : rows) {
-            copy.add(new ArrayList<>(row)); // Create a copy of each row
+            copy.add(new ArrayList<>(row));
         }
         return copy;
     }
@@ -78,7 +76,10 @@ public class Table {
      * @return the index of the column, or -1 if the column does not exist
      */
     public int getColumnIndex(String header) {
-        return headers.indexOf(header);
+    	int colIndex = headers.indexOf(header);  	
+    	if (colIndex == -1) throw new IllegalArgumentException("Column does not exist: " + header);
+    	return colIndex ;
+        		
     }
 
     
@@ -92,9 +93,6 @@ public class Table {
      */
     public String getValue(int rowIndex, String header) {
         int colIndex = getColumnIndex(header);
-        if (colIndex == -1) 
-            throw new IllegalArgumentException("Column does not exist: " + header);
-
         return getRow(rowIndex).get(colIndex);
     }
 
@@ -107,9 +105,6 @@ public class Table {
      */
     public List<String> getColumn(String header) {
         int colIndex = getColumnIndex(header);
-        if (colIndex == -1) 
-            throw new IllegalArgumentException("Column does not exist: " + header);
-
         List<String> column = new ArrayList<>();
         for (List<String> row : rows) {
             column.add(row.get(colIndex));
@@ -127,7 +122,7 @@ public class Table {
      */
     public void addColumn(String header, List<String> values) {
         if (values.size() != rows.size()) 
-            throw new IllegalArgumentException("Anzahl der Werte passt nicht zu den Zeilen!");
+            throw new IllegalArgumentException("Too many values in column!");
         headers.add(header);
         for (int i = 0; i < rows.size(); i++) {
             rows.get(i).add(values.get(i));
@@ -143,7 +138,7 @@ public class Table {
      */
     public void addRow(List<String> row) {
         if (row.size() != headers.size()) 
-            throw new IllegalArgumentException("Zeile hat zu wenig Spalten!");
+            throw new IllegalArgumentException("Too less values in row!");
         rows.add(new ArrayList<>(row));
     }
     
@@ -160,8 +155,6 @@ public class Table {
     public List<String> processColumns(String header1, String header2, BiFunction<Double, Double, Double> operator) {
         int idx1 = getColumnIndex(header1);
         int idx2 = getColumnIndex(header2);
-        if (idx1 == -1 || idx2 == -1) 
-            throw new IllegalArgumentException("Eine oder beiden Spalten existieren nicht!");
 
         List<String> result = new ArrayList<>();
 
@@ -260,7 +253,10 @@ public class Table {
      */
     public List<Integer> getExtremeIndices(String header, boolean findMax) {
         Double extreme = getExtremeValue(header, findMax);
-        if (extreme == null) return new ArrayList<>();
+        if (extreme == null) {
+        	System.out.println("No extreme values, emptyl is returned.");
+        	return new ArrayList<>();
+        }
         return getIndicesOfValue(header, extreme);
     }
 
@@ -273,7 +269,10 @@ public class Table {
      */
     public List<Integer> getExtremeIndices(List<String> col, boolean findMax) {
         Double extreme = getExtremeValue(col, findMax);
-        if (extreme == null) return new ArrayList<>();
+        if (extreme == null) {
+        	System.out.println("No extreme values, emptyl is returned.");
+        	return new ArrayList<>();
+        }
         return getIndicesOfValue(col, extreme);
     }
 

@@ -13,10 +13,8 @@ import java.util.List;
  */
 public class CSVReader extends TableReader {
     
-    // Path to the CSV file
 	private final String path;
-    
-    // Delimiter used to separate values in the CSV
+
     private final String delimiter;
     
     /**
